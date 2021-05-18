@@ -1,0 +1,214 @@
+TABLE 1 :  film, actor, film_actor, film category, language, country, 
+
+TABLE 2 : country, city, adress
+
+
+TABLE 3 : payment, customer, rental, staff, store
+
+
+
+
+<<<<TABLE 1 QUERY>>>>>
+
+
+SELECT  title, release_year, rating, length, language.name as film_language, film_actor.actor_id, first_name ||' '|| last_name as actor_name 
+	FROM film
+
+LEFT OUTER JOIN film_actor
+	ON	film.film_id = film_actor.film_id
+	
+LEFT OUTER JOIN actor
+	ON film_actor.actor_id = actor.actor_id
+
+LEFT OUTER JOIN language
+	ON film.language_id = language.language_id
+
+
+
+
+
+
+SELECT rating, COUNT(rating) as count
+	FROM film
+GROUP BY rating
+ORDER BY count DESC
+
+
+SELECT name as language_name, COUNT(language) as count
+	FROM language
+GROUP BY name
+ORDER BY name DESC
+
+
+
+
+
+
+
+SELECT film.language_id, language.name as film_language
+	FROM film
+
+LEFT OUTER JOIN language
+	ON film.language_id = language.language_id
+
+
+
+
+
+
+SELECT 
+	film.language_id, language.name, COUNT(film.language_id) as frequency
+FROM 
+	film
+JOIN language ON
+film.language_id = language.language_id
+
+GROUP BY film.language_id, language.name
+
+
+
+
+
+
+SELECT 
+	film.title, category.name
+FROM 
+	film_category
+
+JOIN film
+	ON film_category.film_id = film.film_id
+
+JOIN category
+	ON film_category.category_id = category.category_id
+
+
+
+
+SELECT 
+	category.name, COUNT(category.name) as Frequency
+FROM 
+	film_category
+
+JOIN category
+	ON film_category.category_id = category.category_id
+
+GROUP BY category.name
+ORDER BY Frequency DESC
+
+
+
+
+
+
+>>>>>>COMPLEX COMBINATION OF TABLE 1<<<<<<<
+
+SELECT
+	title,
+	release_year,
+	length,
+	rating,
+	category.name as film_category,
+	language.name as film_language,
+	actor.first_name ||' '|| actor.last_name as actor_name
+	
+FROM 
+	film
+
+
+
+JOIN
+	language
+ON 	
+	language.language_id = film.language_id 
+	
+
+JOIN
+	film_actor
+ON 
+	film_actor.film_id = film.film_id  
+
+
+JOIN 
+	actor
+ON
+	actor.actor_id = film_actor.actor_id
+	
+
+JOIN 
+	film_category
+ON	
+	film_category.film_id = film.film_id
+
+JOIN
+	category
+ON
+	category.category_id = film_category.category_id
+
+
+
+
+ORDER BY title ASC
+
+
+
+
+<<<<TABLE 2>>>>
+
+
+SELECT
+	customer.first_name || ' ' || customer.last_name as customer_name,
+	customer.email,
+	address.address || ' ; ' ||	address.district || ' ; ' || city.city || ' ; ' || address.postal_code as customer_address,
+	address.phone,
+	rental.rental_date,
+	rental.return_date,
+	film.title as film_rental,
+	staff.first_name || ' ' || staff.last_name as staff_name,
+	customer.store_id as store_name
+	
+	
+	
+	
+FROM 
+	customer
+	
+
+JOIN address ON address.address_id = customer.address_id
+JOIN city ON city.city_id = address.city_id
+JOIN rental ON rental.customer_id = customer.customer_id 
+JOIN inventory ON inventory.inventory_id = rental.inventory_id
+JOIN film ON inventory.film_id = film.film_id
+JOIN staff ON staff.staff_id = rental.staff_id
+
+
+ORDER BY customer_name, rental_date ASC
+
+	
+	
+
+
+
+
+
+	
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
